@@ -139,14 +139,15 @@ game :: Player -> Board -> IO (Player, Board)
 game p board = do
     if p == 2 then do
         nextBoard <- minMax board
-        if (verifyBoard nextBoard) == True then return (p, nextBoard)
-    	else game (if p == 1 then 2 else 1) nextBoard
+        if (verifyBoard nextBoard) == True then return (2, nextBoard)
+    	else game 1 nextBoard
     else do
         if verifyDraw board then return (0, board)
         else do
             nextBoard <- play p board
-            if (verifyBoard nextBoard) == True then return (p, nextBoard)
-        	else game (if p == 1 then 2 else 1) nextBoard
+            if (verifyBoard nextBoard) == True then return (1, nextBoard)
+        	else if (verifyDraw nextBoard) == True then return (0, nextBoard)
+        	else game 2 nextBoard
 
 
 main :: IO()
