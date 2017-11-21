@@ -159,4 +159,8 @@ main = do
     if(fst winner == 0) then putStrLn ("Empate!!")
     else if (fst winner == 1) then putStrLn ("Voce venceu!!")
     else putStrLn ("A IA venceu!!")
-    return ()
+
+    putStrLn ("Deseja jogar novamente? (Y/N)")
+    res <- getLine
+    if (res == "Y" || res == "y") then main
+    else return ()
