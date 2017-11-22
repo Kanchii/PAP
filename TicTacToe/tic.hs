@@ -87,7 +87,7 @@ getMaxiPos :: [Int] -> Int -> (Int, Int)
 getMaxiPos (x:[]) pos = (x, pos)
 getMaxiPos (x:xs) pos = do
     let res = getMaxiPos xs (pos + 1)
-    if x > (fst res) then (x, pos) else res
+    if x >= (fst res) then (x, pos) else res
 
 intToPos :: Int -> Pos
 intToPos 0 = (0,0)
@@ -102,19 +102,20 @@ intToPos 8 = (2,2)
 
 minMax :: Board -> IO Board
 minMax board = do
-    let res = [if board !! x !! y == Empty then (minMax' (changeCellInMatrix board (x, y) X) 0) else -2 | x <- [0..2],  y <- [0..2]]
+    let res = [if board !! x !! y == Empty then (minMax' (changeCellInMatrix board (x, y) X) 0 9) else -2 | x <- [0..2],  y <- [0..2]]
+    --print(res)
     let maxPos = intToPos $ snd (getMaxiPos res 0)
     return (changeCellInMatrix board maxPos X)
     where
-        minMax' :: Board -> Int -> Int
-        minMax' board minOrMax = do
-            if verifyBoard board then (if minOrMax == 0 then 1 else -1)
+        minMax' :: Board -> Int -> Int -> Int
+        minMax' board minOrMax value = do
+            if verifyBoard board then (if minOrMax == 0 then value else (-value))
             else if verifyDraw board then 0
             else
                 if minOrMax == 0 then do
-                    minimum [ minMax' (changeCellInMatrix board (x, y) O) 1 | x <- [0..2], y <- [0..2], board !! x !! y == Empty]
+                    minimum [ minMax' (changeCellInMatrix board (x, y) O) 1 (value - 1) | x <- [0..2], y <- [0..2], board !! x !! y == Empty]
                 else
-                    maximum [ minMax' (changeCellInMatrix board (x, y) X) 0 | x <- [0..2], y <- [0..2], board !! x !! y == Empty]
+                    maximum [ minMax' (changeCellInMatrix board (x, y) X) 0 (value - 1) | x <- [0..2], y <- [0..2], board !! x !! y == Empty]
 play :: Player -> Board -> IO Board
 play p board = do
         let jogador = "Jogador: " ++ show p
