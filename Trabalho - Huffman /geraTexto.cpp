@@ -25,7 +25,7 @@ int main(int argc, char const *argv[]){
 		}
 	}
 
-	string text = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ \n";
+	string text = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890\n";
 	srand(time(NULL));
 
 	for(int i = 0; i < tamArq; i++){
